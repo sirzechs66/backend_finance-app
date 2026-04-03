@@ -1,61 +1,216 @@
-# Finance Data Processing Backend
+# Finance Data Processing System
 
 ## Overview
-A modular, production-grade FastAPI backend for finance data processing with:
-- User & role management (RBAC)
-- Financial transaction CRUD
-- Dashboard aggregation APIs
-- Secure, validated data flow
 
-## Features
-- Domain-driven design: core, api, modules, repositories, services, policies, schemas
-- Repository pattern for all DB access
-- Service layer for business logic
-- Centralized RBAC (roles/permissions)
-- SQL aggregation for dashboard (no in-memory loading)
-- Pydantic validation, unified error format
-- Logging, rate limiting, secure headers, CORS
-- JWT authentication (access/refresh), bcrypt password hashing
-- Audit logging (CRUD, auth, role changes)
-- Environment-based config via .env
+This project is a modular, secure backend system for managing financial data, paired with a lightweight frontend dashboard for interaction.
 
-## Quickstart
-1. Clone repo & install dependencies:
-   ```sh
+It is designed to demonstrate strong backend engineering principles including clean architecture, role-based access control (RBAC), secure API design, and efficient data processing.
+
+---
+
+## Key Features
+
+### Backend
+
+* Modular architecture (core, api, services, repositories, policies)
+* Role-Based Access Control (RBAC)
+* JWT Authentication (access + refresh tokens)
+* Secure API design (no trust on client-provided identity)
+* Financial transaction management (CRUD + filtering)
+* Dashboard analytics (aggregations using SQL)
+* Repository pattern (no direct DB access outside repositories)
+* Input validation via Pydantic
+* Secure headers, CORS, and rate limiting
+* Audit logging for critical operations
+
+### Frontend
+
+* React + Vite application
+* Authentication (login/register)
+* Dashboard view (financial summaries)
+* Transaction listing
+* API integration with JWT handling
+
+---
+
+## Project Structure
+
+```
+Finiance_proj/
+├── core/              # App config, DB, models
+├── api/               # Route handlers
+├── services/          # Business logic
+├── repositories/      # Database access layer
+├── schemas/           # Validation models
+├── policies/          # RBAC rules
+├── modules/           # Auth & dependencies
+├── alembic/           # DB migrations
+├── frontend/          # React frontend
+├── tests/             # Unit tests
+```
+
+---
+
+## Architecture Overview
+
+The system follows a layered architecture:
+
+```
+Client → API Router → Dependency (Auth)
+       → Service Layer → Repository Layer → Database
+```
+
+### Key Principles
+
+* No business logic in routers
+* No DB access outside repositories
+* All requests validated and authorized
+* User identity derived strictly from JWT (never from client input)
+
+---
+
+## Security Design
+
+* JWT-based authentication (short-lived access tokens)
+* RBAC enforced via centralized policies
+* Prevention of privilege escalation (no client-controlled user_id)
+* Secure HTTP headers (HSTS, XSS protection, etc.)
+* Strict CORS configuration
+* Rate limiting on sensitive endpoints
+* All queries scoped to authenticated user
+* No sensitive data exposure in responses
+
+---
+
+## Getting Started
+
+### Backend Setup
+
+1. Install dependencies:
+
+   ```bash
    pip install -r requirements.txt
    ```
-2. Set up environment variables in `.env` (see sample in repo)
-3. Run DB migrations:
-   ```sh
+
+2. Configure environment variables:
+
+   ```
+   cp .env-example .env
+   ```
+
+3. Run migrations:
+
+   ```bash
    alembic upgrade head
    ```
-4. Start the server:
-   ```sh
+
+4. Start server:
+
+   ```bash
    uvicorn core.app:app --reload
    ```
 
-## API Structure
-- `/users/` - User registration, listing, details
-- `/transactions/` - CRUD, filtering, pagination
-- `/dashboard/` - Aggregated financial data
+Backend runs at:
 
-## Security
-- All endpoints require authentication (JWT)
-- RBAC enforced via policies
-- Secure headers, strict CORS, rate limiting
-- No sensitive data exposure
-- All secrets in .env
+```
+http://localhost:8000
+```
+
+---
+
+### Frontend Setup
+
+1. Navigate to frontend:
+
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Run dev server:
+
+   ```bash
+   npm run dev
+   ```
+
+Frontend runs at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## API Endpoints
+
+| Endpoint         | Description         |
+| ---------------- | ------------------- |
+| `/auth/login`    | User authentication |
+| `/users/`        | User management     |
+| `/transactions/` | Transaction CRUD    |
+| `/dashboard/`    | Financial summaries |
+
+---
+
+## Assumptions
+
+* Authentication is required for all endpoints
+* Users can only access their own data unless explicitly permitted
+* SQLite is used for simplicity (can be swapped with PostgreSQL)
+* Frontend is a thin client (no security logic enforced there)
+
+---
+
+## Tradeoffs
+
+* SQLite used for simplicity over scalability
+* LocalStorage used for JWT (instead of HttpOnly cookies)
+* Minimal UI to focus on backend architecture
+* In-memory rate limiting and caching (not distributed)
+
+---
+
+## Future Improvements
+
+* PostgreSQL + Redis for production readiness
+* Role-based UI rendering
+* Advanced filtering & analytics
+* Distributed rate limiting
+* Observability (logging + tracing)
+* Secure cookie-based authentication
+
+---
 
 ## Testing
-- Run tests with:
-   ```sh
-   pytest
-   ```
-- Tests cover RBAC and dashboard aggregation
 
-## Extending
-- Add routers/services for new modules
-- Swap DB or cache with minimal changes
-- Integrate with frontend (React, etc.)
+Run tests with:
 
-## See system_arch.md for full architecture and security details.
+```bash
+pytest
+```
+
+Focus areas:
+
+* RBAC enforcement
+* Data access isolation
+* Dashboard aggregation correctness
+
+---
+
+## Documentation
+
+* `system_arch.md` → detailed system design
+* `progress.md` → development tracking
+
+---
+
+## Final Notes
+
+This project prioritizes clarity, maintainability, and security over unnecessary complexity. It demonstrates how a backend system should be structured to handle real-world concerns such as access control, data integrity, and modular scalability.
+
+---
