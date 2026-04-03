@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+
+# Environments
+.env
+.venv/
+venv/
+ENV/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite3
+finance.db
+
+# Alembic
+alembic/versions/
+
+# Test
+.coverage
+htmlcov/
+.cache/
+
+# Logs
+*.log
+
+# Misc
+*.bak
+*.swp
+*.tmp
