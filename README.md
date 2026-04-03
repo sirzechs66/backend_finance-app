@@ -8,6 +8,9 @@ It is designed to demonstrate strong backend engineering principles including cl
 
 ---
 
+<img width="1443" height="925" alt="image" src="https://github.com/user-attachments/assets/9319c1a7-0892-4cfb-aca6-504c1676c645" />
+
+
 ## Key Features
 
 ### Backend
